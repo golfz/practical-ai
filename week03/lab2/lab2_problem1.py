@@ -19,6 +19,7 @@ sheet = book.sheet_by_index(0)
 
 number_of_rows = len(list(sheet.get_rows()))
 data = np.asarray([sheet.row_values(i) for i in range(1, number_of_rows)])
+number_of_samples = number_of_rows - 1
 
 '''
 Step 2: Create placeholders for feature X (number of fire) and target Y (number of theft)
@@ -41,7 +42,6 @@ hypothesis_function = theta0 + theta1 * X
 Step 5: Use the square error as the loss function
 '''
 loss_function = tf.multiply(tf.divide(1, 2), tf.reduce_mean(tf.pow(Y - hypothesis_function, 2)))
-tf.summary.scalar('total_cost', loss_function)
 
 '''
 Step 6: Using gradient descent with learning rate of 0.001 to minimize loss
@@ -53,8 +53,6 @@ with tf.Session() as session:
     Step 7: Initialize the necessary variables, i.e. theta0 and theta1
     '''
     session.run(tf.global_variables_initializer())
-
-    merged = tf.summary.merge_all()
     writer = tf.summary.FileWriter('./graphs/linear_regression', session.graph)
 
     '''
@@ -63,8 +61,7 @@ with tf.Session() as session:
     for i in range(30000):
         session.run(optimizer, feed_dict={X: data.T[0], Y: data.T[1]})
 
-        summary, cost = session.run([merged, loss_function], feed_dict={X: data.T[0], Y: data.T[1]})
-        writer.add_summary(summary, i)
+        cost = session.run([loss_function], feed_dict={X: data.T[0], Y: data.T[1]})
 
         print("Epoch: {0}, cost = {1}, theta0 = {2}, theta1 = {3}".format(i + 1, cost,
                                                                           session.run(theta0), session.run(theta1)))
@@ -82,8 +79,8 @@ with tf.Session() as session:
     # Graphic display
     plt.plot(data.T[0], data.T[1], 'ro', label='Original data')
     plt.plot(data.T[0], session.run(theta0) + session.run(theta1) * data.T[0], 'b', label='Fitted line')
-    plt.xlabel('fires per 1000 housing units')
-    plt.ylabel('thefts per 1000 population')
+    plt.xlabel('fire per 1000 housing units')
+    plt.ylabel('theft per 1000 population')
     plt.legend()
     plt.show()
 

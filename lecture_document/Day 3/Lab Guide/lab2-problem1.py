@@ -36,12 +36,12 @@ theta1 = tf.Variable(0.0, name='theta1')
 '''
 Step 4: Define a hypothesis function to predict Y
 '''
-hypothesis_function = # Write your code here !
+hypothesis_function = theta0 + theta1 * X
 
 '''
 Step 5: Use the square error as the loss function
 '''
-loss_function = # Write your code here !
+loss_function = tf.multiply(tf.divide(1, 2), tf.reduce_mean(tf.pow(Y - hypothesis_function, 2)))
 
 '''
 Step 6: Using gradient descent with learning rate of 0.001 to minimize loss
@@ -59,7 +59,9 @@ with tf.Session() as session:
     Step 8: Train the model for 30,000 epochs
     '''
     for i in range(30000):
-        # Write your code here !
+        session.run(optimizer, feed_dict={X: data.T[0], Y: data.T[1]})
+
+        cost = session.run([loss_function], feed_dict={X: data.T[0], Y: data.T[1]})
 
         print("Epoch: {0}, cost = {1}, theta0 = {2}, theta1 = {3}".format(i + 1, cost,
                                                                           session.run(theta0), session.run(theta1)))
@@ -67,7 +69,9 @@ with tf.Session() as session:
     '''
     Step 9: Prints the training cost, theta0, and theta1
     '''
-    # Write your code here !
+    print("Optimization Finished!")
+    training_cost = session.run(loss_function, feed_dict={X: data.T[0], Y: data.T[1]})
+    print("Cost =", training_cost, "theta0 = ", session.run(theta0), "theta1 = ", session.run(theta1), '\n')
 
     '''
     Step 10: Plot the results
