@@ -1,1 +1,1 @@
-# practical-ai
+# Practical AI
