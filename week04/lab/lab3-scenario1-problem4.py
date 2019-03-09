@@ -35,8 +35,8 @@ def plot_decision_boundary(theta, axis):
     # Now, let's solve the above equation for x_2 (Why is this reasonable?)
     # i.e. x_2 = -(theta0 + theta_1 * x_1) / theta_2
 
-    point1 = # According to the above hint, what code should we put here ?
-    point2 = # According to the above hint, what code should we put here ?
+    point1 = (x_limit[0], - (theta[0] + theta[1] * x_limit[0]) / theta[2])
+    point2 = (x_limit[1], - (theta[0] + theta[1] * x_limit[1]) / theta[2])
 
     plt.plot((point1[0], point2[0]), (point1[1], point2[1]), 'r-')
 
@@ -158,3 +158,6 @@ Step 3: Call the methods to plot the dataset and the decision boundary
 
 plot_dataset(X1, X2, axes)
 plot_decision_boundary(theta, axes)
+
+plt.show()
+

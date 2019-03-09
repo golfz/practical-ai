@@ -20,7 +20,8 @@ def hypothesis(x, theta):
             The vector theta.
     """
     z = np.dot(x, theta)
-    sigmoid = # write your code to calculate the sigmoid
+    ''' # write your code to calculate the sigmoid '''
+    sigmoid = 1.0 / (1.0 + np.exp(-z))
     return sigmoid
 
 
@@ -201,16 +202,24 @@ while not converged:
     # Here, I will introduce it shortly as follows:
     # Accuracy = the summation of correct predictions divided by the number of dataset
     accuracy = sum(predicted_y_crisp == y) / number_of_samples
-    log_likelihood = # write your code here to compute the log likelihood
+    ''' # write your code here to compute the log likelihood '''
+    log_likelihood = np.sum(np.multiply(y, np.log(predicted_y))
+                            + np.multiply((1 - y), np.log(1 - predicted_y)))
 
     print('End epoch {0} with accuracy = {1}, log likelihood = {2}'.format(
         epoch + 1, accuracy, log_likelihood))
 
     if log_likelihood < best_log_likelihood + 1e-6:
-        # Now, we want to say 'converge' if the current log likelihood becomes lower than the best one (plus a certain error). What code should we write here ?
+        ''' 
+        # Now, we want to say 'converge' if the current log likelihood becomes lower than the best one (plus a certain error). 
+        What code should we write here ? 
+        '''
+        converged = True
+
 
     if log_likelihood > best_log_likelihood:
-        # Now, we want to update the best log likelihood if the current one is the the best one. What code should we write here ?
+        # ''' # Now, we want to update the best log likelihood if the current one is the the best one. '''
+        best_log_likelihood = log_likelihood
 
     epoch = epoch + 1
 

@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.io as sio
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 
 '''
@@ -32,13 +33,14 @@ Step 2: Define the hypothesis function
 '''
 
 z = tf.matmul(X, thetas)
-hypothesis_function = # wrute the hypothesis function based on TF methods here 
+hypothesis_function = tf.div(1.0, 1.0 + tf.exp(-(z + theta0)))
 
 '''
 Step 3: Define the cost function
 '''
 
-cost_function = # write the cost function based on TF methods here
+cost_function = tf.reduce_mean(-(Y * tf.log(hypothesis_function))
+                               - (1 - Y) * tf.log(1 - hypothesis_function))
 
 '''
 Step 4: Use gradient descent with learning rate of 0.6 to minimize the cost function
@@ -58,8 +60,19 @@ should be 5000x10, where :
     - columns indicates classes.
 '''
 
-classifier = # Based on the above explanation, what code should we put here?  
-class_probabilities = # Based on the above explanation, what code should we put here? 
+classifier = np.zeros(shape=[number_of_labels, number_of_features + 1])
+class_probabilities = np.zeros(shape=[number_of_samples, number_of_labels])
+
+# Now, we sample 10 images from the training dataset
+random_sample_index = np.random.choice(feature_matrix.shape[0], 10)
+feature_random_sample = feature_matrix[random_sample_index, :]
+actual_random_sample = target_vector[random_sample_index].T
+
+# Display each randomized image
+plt.imshow(feature_random_sample.reshape(-1, 20).T)
+plt.axis('off')
+
+class_probability_sample = np.zeros(shape=[10, number_of_labels])
 
 with tf.Session() as session:
     '''
@@ -67,20 +80,28 @@ with tf.Session() as session:
     '''
     session.run(tf.global_variables_initializer())
 
-    for i in range(number_of_labels):
+    for i in range(number_of_labels):  # number_of_labels: 0, 1, ..., 9; however, actual labels: 1, 2, ..., 10
         print("Running the {}th-classifier".format(i+1))
         label = (target_vector == (i + 1)).astype(int)
 
         for j in range(5000):
-            _, cost = # run the optimizer and cost function in a session w.r.t. matrices Input and Output})
+            _, cost = session.run([optimizer, cost_function],
+                                  feed_dict={X: feature_matrix,
+                                             Y: np.matrix(label).T})
 
         print("Cost = {}\n".format(cost))
 
         # classifier[0, :] corresponds to digit 1 whereas classifier[9, :] corresponds to digit 10.
-        classifier[i, :] = np.concatenate([np.matrix(session.run(theta0)), np.matrix(session.run(thetas)).T], axis=1)
-        class_probabilities[:, i] = # run the hypothesis function to calculate the class probability for this particular classifier
+        classifier[i, :] = np.concatenate([np.matrix(session.run(theta0)),
+                                           np.matrix(session.run(thetas)).T],
+                                          axis=1)
+        class_probabilities[:, i] = session.run(hypothesis_function,
+                                                feed_dict={X: feature_matrix}).T
+
+        class_probability_sample[:, i] = session.run(hypothesis_function, feed_dict={X: feature_random_sample}).T
+
+    print("Actual digit:\n {}".format(actual_random_sample))
+    print("Predicted digit:\n {}".format(class_probability_sample.argmax(axis=1) + 1))
 
     predictions = class_probabilities.argmax(axis=1)
-
-
-print("Training accuracy: {} %".format(100 * np.mean((predictions + 1) == target_vector)))
+    print("Mean accuracy: {} %".format(100 * np.mean((predictions + 1) == target_vector)))

@@ -125,13 +125,14 @@ Step 2: Define the hypothesis function
 '''
 
 z = tf.matmul(X, thetas) 
-hypothesis_function = # wrute the hypothesis function based on TF methods here 
+hypothesis_function = tf.div(1.0, 1.0 + tf.exp(-(z + theta0)))
 
 '''
 Step 3: Define the cost function
 '''
 
-cost_function = # write the cost function based on TF methods here
+cost_function = tf.reduce_mean(-(Y * tf.log(hypothesis_function))
+                               - (1 - Y) * tf.log(1 - hypothesis_function))
 
 '''
 Step 4: Use gradient descent with learning rate of 0.03 to minimize the cost function
@@ -143,11 +144,30 @@ with tf.Session() as session:
     '''
     Step 5: Initialize the necessary variables
     '''
-    # write your code for initializing all variables
+    session.run(tf.global_variables_initializer())
 
     for i in range(30000):
-        _, cost = # run the optimizer and cost function in a session w.r.t. matrices Input and Output})
+        _, cost = session.run([optimizer, cost_function], feed_dict={X: Input, Y: Output})
 
         print("Epoch: {0}, cost = {1}".format(i + 1, cost))
 
     print("theta0: {0}, theta1: {1}, theta2: {2}".format(session.run(theta0[0]), session.run(thetas[0][0]), session.run(thetas[1][0])))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
