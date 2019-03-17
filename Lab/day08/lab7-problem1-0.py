@@ -34,5 +34,6 @@ the y axis indicates the amount of water flowing out of the dam
 plt.scatter(X_train[:,1], y_train, s=50, c='r', marker='x', linewidths=1)
 plt.xlabel('Change in water level (x)')
 plt.ylabel('Water flowing out of the dam (y)')
-plt.ylim(bottom=0);
+plt.ylim(bottom=0)
+plt.show()
 

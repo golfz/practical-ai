@@ -65,7 +65,7 @@ Step 2: Now, we want to visualize some examples based on the following steps:
 sample = np.random.choice(X_new.shape[0], 20)
 
 # X_new[sample,1:].reshape(-1,20) is a matrix of dimension 400 x 20
-plt.imshow(X_new[sample,1:].reshape(-1,20).T)
+plt.imshow(X_new[sample, 1:].reshape(-1,20).T)
 plt.axis('off');
 
 
