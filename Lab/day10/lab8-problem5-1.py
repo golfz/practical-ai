@@ -1,5 +1,24 @@
 import re
 from nltk.stem import PorterStemmer
+import numpy as np
+
+
+def emailOneHot(word_indices, vocabulary):
+    """
+    Build an email one-hot vector from a given word_indices vector and the vocabulary
+
+    :param word_indices:
+    :param vocabulary:
+    :return:
+    """
+
+    length = len(vocabulary)
+    one_hot = np.zeros((length, 1))
+
+    for i in word_indices:
+        one_hot[int(i)] = 1
+
+    return one_hot
 
 
 def processEmail(email_content, vocabulary):
@@ -14,7 +33,7 @@ def processEmail(email_content, vocabulary):
     # Lower case
     email_content = email_content.lower()
 
-    # Handle numbers, re is RegEx
+    # Handle numbers
     email_content = re.sub("[0-9]+", "number", email_content)
 
     # Handle URLs
@@ -31,10 +50,6 @@ def processEmail(email_content, vocabulary):
     for token in special_characters:
         email_content = email_content.replace(str(token), "")
     email_content = email_content.replace("\n", " ")
-
-    print('Content in the email after processed:')
-    print(email_content)
-    print('\n')
 
     # Stem the word
     stemmer = PorterStemmer()
@@ -86,3 +101,13 @@ word_indices = processEmail(file_contents, vocabulary)
 print('Word indices of the sample email is:')
 print(word_indices)
 
+
+'''
+Step 3: Build one-hot vector from word indices
+'''
+
+one_hot = emailOneHot(word_indices, vocabulary)
+
+print('\n')
+print("Length of one-hot vector: {}".format(len(one_hot)))
+print("Number of non-zero entries: {}".format(np.sum(one_hot)))
