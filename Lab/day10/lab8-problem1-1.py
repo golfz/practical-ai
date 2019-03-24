@@ -61,3 +61,5 @@ X1, X2 = np.meshgrid(np.linspace(X[:, 0].min(), X[:, 0].max(), num=300),
                      np.linspace(X[:, 1].min(), X[:, 1].max(), num=300))
 
 plt.contour(X1, X2, classifier2.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape), colors="b")
+
+plt.show()
