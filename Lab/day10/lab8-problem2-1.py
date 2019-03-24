@@ -23,14 +23,15 @@ negatives = (y == 0).reshape(number_of_row, 1)
 
 print('\n')
 
-
 '''
 Step 1: Instantiate a 'rbf' SVM classifier
 '''
 
-classifier1 = SVC(kernel="rbf", gamma=30)
+# classifier1 = SVC(kernel="rbf", gamma=30)
+# classifier1 = SVC(kernel="rbf", gamma=60)
+# classifier1 = SVC(kernel="rbf", gamma=100)
+classifier1 = SVC(kernel="rbf", gamma=1000)
 classifier1.fit(X, np.ravel(y))
-
 
 '''
 Step 2: Visualizing the training set result 
@@ -45,3 +46,5 @@ X1, X2 = np.meshgrid(np.linspace(X[:, 0].min(), X[:, 0].max(), num=300),
                      np.linspace(X[:, 1].min(), X[:, 1].max(), num=300))
 
 plt.contour(X1, X2, classifier1.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape), colors="b")
+
+plt.show()
