@@ -53,6 +53,25 @@ def findClosestCentroids(X, centroids):
     return indices
 
 
+def kMeansInitCentroids(X, number_of_centroids):
+    """
+    Initialize centroids that are to be used in K-means on the dataset X
+
+    :param X:
+    :param number_of_centroids: the number of centroids to be initialized
+    :return:
+    """
+
+    number_of_examples = X.shape[0]
+    number_of_features = X.shape[1]
+    centroids = np.zeros((number_of_centroids, number_of_features))
+
+    for i in range(number_of_centroids):
+        centroids[i] = X[np.random.randint(0, number_of_examples + 1), :]
+
+    return centroids
+
+
 def runKmeans(X, centroids, indices, number_of_iterations):
     number_of_centroids = centroids.shape[0]
 
@@ -77,7 +96,6 @@ def runKmeans(X, centroids, indices, number_of_iterations):
         indices = findClosestCentroids(X, centroids)
 
     plt.tight_layout()
-
     plt.show()
 
 
@@ -110,5 +128,8 @@ print("Centroids computed after initial finding of closet centroids: \n{}\n".for
 '''
 Step 3: Visualize K-means clustering
 '''
+
+initial_centroids = kMeansInitCentroids(X, 3)
+indices = findClosestCentroids(X, initial_centroids)
 
 runKmeans(X, initial_centroids, indices, 6)
