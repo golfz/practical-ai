@@ -4,8 +4,7 @@ from scipy.io import loadmat
 from sklearn.svm import SVC
 
 
-def findBestCandSigma(X, y, step_values):
-
+def find_best_c_and_sigma(X, y, step_values):
     best_score = 0
     best_c = 0
     best_gamma = 0
@@ -27,7 +26,6 @@ def findBestCandSigma(X, y, step_values):
                 best_gamma = gamma
 
     return best_c, best_gamma
-
 
 
 '''
@@ -52,18 +50,16 @@ negatives = (y_train == 0).reshape(number_of_row, 1)
 
 print('\n')
 
-
 '''
 Step 1: Output the best C and gamma to use. To select these values, 
 we suggest trying value in multiplicative steps (e.g. [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30])
 '''
 
 values = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
-c, gamma = findBestCandSigma(X_cv, y_cv.ravel(), values)
+c, gamma = find_best_c_and_sigma(X_cv, y_cv.ravel(), values)
 
 print("Best C: {}".format(c))
 print("Best gamma: {}".format(gamma))
-
 
 '''
 Step 2: Instantiate an SVM classifier based on the best C and gamma. 
@@ -82,3 +78,5 @@ X1, X2 = np.meshgrid(np.linspace(X_train[:, 0].min(), X_train[:, 0].max(), num=3
                      np.linspace(X_train[:, 1].min(), X_train[:, 1].max(), num=300))
 
 plt.contour(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape), colors="b")
+
+plt.show()
